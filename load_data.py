@@ -1,0 +1,2 @@
+def LoadData(path):
+    return ""
