@@ -1,10 +1,10 @@
 import torch
 import torch.nn as nn
 
-from models import initLipArchitecture
+from models.lipReader import Lipreader
 
 if __name__ == "__main__":
     paramsEncoder = ""
     paramsDecoder = ""
-    initLipArchitecture(paramsEncoder,paramsDecoder)
+    Lipreader(paramsEncoder,paramsDecoder)
     print("Everything Working")
