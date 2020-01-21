@@ -1,4 +1,3 @@
-import glob
 import cv2
 import torch
 def extractFramesFromSingleVideo(video):
@@ -19,9 +18,3 @@ def extractFramesFromSingleVideo(video):
     print("Total %d frames extracted" % frames.shape[0])
     return frames #Tensor of n * 256 * 256 * 3
 
-def LoadData(path="."):
-    videos = glob.glob(path + '/*.mp4') #Extarct all mp4 files in current dir 
-    videoFrames = []
-    for video in videos:
-        videoFrames.append(extractFramesFromSingleVideo(video))
-    return videoFrames 

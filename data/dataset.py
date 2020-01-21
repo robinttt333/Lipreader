@@ -1,5 +1,6 @@
 from torch.utils.data import Dataset
-
+from load_data import extractFramesFromSingleVideo
+import glob
 class LRWDataset(Dataset):
     def __init__(self,path):
         self.path = path
@@ -9,7 +10,8 @@ class LRWDataset(Dataset):
         self.initLabels(path)
     
     def __getitem__(self,index):
-        pass
+        video = self.videos[index]
+        return video
     
     def __len__(self):
         return len(self.videos)
@@ -18,6 +20,10 @@ class LRWDataset(Dataset):
         pass
     
     def initVideos(self,path):
-        pass
-    
-    
+        videos = glob.glob(path + '/*.mp4') #Extarct all mp4 files in current dir 
+        videoFrames = []
+        for video in videos:
+            videoFrames.append(extractFramesFromSingleVideo(video))
+        self.videos = videoFrames 
+        
+        
