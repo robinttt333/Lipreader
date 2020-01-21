@@ -5,8 +5,8 @@ class LRWDataset(Dataset):
         self.path = path
         self.videos = []
         self.labels = []
-        self.initVideos()
-        self.initLabels()
+        self.initVideos(path)
+        self.initLabels(path)
     
     def __getitem__(self,index):
         pass
@@ -14,10 +14,10 @@ class LRWDataset(Dataset):
     def __len__(self):
         return len(self.videos)
 
-    def initLabels(path):
+    def initLabels(self,path):
         pass
     
-    def initVideos(path):
+    def initVideos(self,path):
         pass
     
     
