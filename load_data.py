@@ -24,4 +24,4 @@ def LoadData(path="."):
     videoFrames = []
     for video in videos:
         videoFrames.append(extractFramesFromSingleVideo(video))
-    return videoFrames
+    return videoFrames 
