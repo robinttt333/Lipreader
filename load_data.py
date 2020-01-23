@@ -1,6 +1,6 @@
 import cv2
 import torch
-from .globalVariables import *
+from globalVariables import IMAGE_CHANNELS,IMAGE_HEIGHT,IMAGE_WIDTH,FRAME_COUNT
 
 def extractFramesFromSingleVideo(video):
     video = cv2.VideoCapture(video)

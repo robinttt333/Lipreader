@@ -1,3 +1,4 @@
+'''This is a file created to hold our global variables'''
 IMAGE_HEIGHT = 256
 IMAGE_WIDTH = 256
 IMAGE_CHANNELS = 3
