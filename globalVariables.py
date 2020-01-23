@@ -1,9 +1,19 @@
 '''This is a file created to hold our global variables'''
+import torchvision.transforms as transforms
+
 IMAGE_HEIGHT = 256
 IMAGE_WIDTH = 256
-IMAGE_CHANNELS = 3
+IMAGE_CHANNELS = 1
 FRAME_COUNT = 29 
 CONV3dOUTPUT_CHANNELS = 64
 CONV3d_KERNEL = (5,7,7)
 CONV3d_STRIDE = (1,2,2) 
 CONV3D_PADDING = (2,3,3)
+IMAGE_TRANSFORMS = [
+    transforms.ToPILImage(),
+    transforms.CenterCrop((IMAGE_HEIGHT/2,IMAGE_WIDTH/2)),
+    transforms.Grayscale(num_output_channels=1),
+    transforms.ToTensor(),
+    ]
+BATCH_SIZE = 10
+SHUFFLE = True
