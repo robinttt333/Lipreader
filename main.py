@@ -18,5 +18,7 @@ if __name__ == "__main__":
         "kernel" : CONV3d_KERNEL
     }
     paramsDecoder = ""
-    Lipreader(paramsEncoder,paramsDecoder)
+    lipreaderModel = Lipreader(paramsEncoder,paramsDecoder)
+    lipreaderModel(data)
     print("Everything Working")
+    

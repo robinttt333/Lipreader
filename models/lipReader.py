@@ -13,4 +13,5 @@ class Lipreader(nn.Module):
         self.Seq2SeqDecoder = Seq2SeqDecoder(paramsDecoder) 
     
     def forward(self,input):
+        input = input.videos[0].unsqueeze(0) #adding a 5th dimension for batch size by using unsqueeze(0)
         return self.Seq2SeqDecoder(self.Seq2SeqEncoder(input)) 

@@ -10,4 +10,4 @@ class Seq2SeqEncoder(nn.Module):
 
     def forward(self,input):
         '''This input will be a tensor of frames extracted from a video'''
-        return self.fc2(self.fc1(input))
+        return self.Conv3dNetwork(input)
