@@ -11,9 +11,13 @@ CONV3d_STRIDE = (1,2,2)
 CONV3D_PADDING = (2,3,3)
 IMAGE_TRANSFORMS = [
     transforms.ToPILImage(),
-    transforms.CenterCrop((IMAGE_HEIGHT/2,IMAGE_WIDTH/2)),
+    transforms.CenterCrop((112,112)),  #Cropping to be done to 112 * 112 based on the paper
     transforms.Grayscale(num_output_channels=1),
     transforms.ToTensor(),
+    transforms.Normalize([0.4161,],[0.1688,]),
     ]
+FRONTEND_POOL_KERNEL = (1,3,3)
+FRONTEND_POOL_STRIDE = (1,2,2)
+FRONTEND_POOL_PADDING = (0,1,1)
 BATCH_SIZE = 10
 SHUFFLE = True

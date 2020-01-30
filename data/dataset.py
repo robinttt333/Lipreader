@@ -34,7 +34,7 @@ class LRWDataset(Dataset):
         return len(self.videos)
 
     def initLabels(self,path):
-        self.labels.append(0)
+        self.labels = [0]
     
     def initVideos(self,path):
         videos = glob.glob(os.path.join(path,'*.mp4')) #Extarct all mp4 files in current dir 
