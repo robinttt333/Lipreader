@@ -4,7 +4,7 @@ from models.lipReader import Lipreader
 from data.dataset import LRWDataset
 from globalVariables import (IMAGE_CHANNELS,CONV3dOUTPUT_CHANNELS,CONV3D_PADDING,
 CONV3d_KERNEL,CONV3d_STRIDE,IMAGE_TRANSFORMS,BATCH_SIZE,SHUFFLE,FRONTEND_POOL_KERNEL,
-FRONTEND_POOL_STRIDE,FRONTEND_POOL_PADDING)
+FRONTEND_POOL_STRIDE,FRONTEND_POOL_PADDING,RESNET_MODEL,PRE_TRAIN_RESNET)
 from torch.utils.data import DataLoader
 
 if __name__ == "__main__":
@@ -22,11 +22,13 @@ if __name__ == "__main__":
         "kernel" : CONV3d_KERNEL,
         "poolKernel" : FRONTEND_POOL_KERNEL,
         "poolStride" : FRONTEND_POOL_STRIDE,
-        "poolPadding" : FRONTEND_POOL_PADDING
+        "poolPadding" : FRONTEND_POOL_PADDING,
+        "resnetModel" : RESNET_MODEL,
+        "preTrain" : PRE_TRAIN_RESNET
     }
     paramsDecoder = ""
     lipreaderModel = Lipreader(paramsEncoder,paramsDecoder)
     for i,batch in enumerate(dataLoader):
-        lipreaderModel(batch[0])
+        print(lipreaderModel(batch[0]).shape)
     print("Everything Working")
     
