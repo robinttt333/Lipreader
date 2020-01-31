@@ -34,3 +34,5 @@ LSTM_LAYERS = 2
 
 #Dataloader settings
 BATCH_SIZE = 10
+
+NUM_CLASSES = 500

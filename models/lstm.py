@@ -7,5 +7,5 @@ class BidirectionalLSTM(nn.Module):
                     num_layers=paramsDecoder["lstmLayers"],batch_first=True,bidirectional=True) 
 
     def forward(self,input):
-        lstmOutput,(hidde,cell) = self.biLSTM(input)
+        lstmOutput,(hidden,cell) = self.biLSTM(input)
         return lstmOutput
