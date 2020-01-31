@@ -37,6 +37,7 @@ if __name__ == "__main__":
 
     }
     lipreaderModel = Lipreader(paramsEncoder,paramsDecoder)
+    lipreaderModel.getModelDetails()
     for i,batch in enumerate(dataLoader):
         print(lipreaderModel(batch[0]).shape)
     print("Everything Working")

@@ -14,3 +14,8 @@ class Lipreader(nn.Module):
     
     def forward(self,input):
         return self.Seq2SeqDecoder(self.Seq2SeqEncoder(input)) 
+
+    def getModelDetails(self):
+        for param in self.state_dict():
+            print(param,self.state_dict()[param].shape)
+    
