@@ -5,7 +5,9 @@ from data.dataset import LRWDataset
 from globalVariables import (IMAGE_CHANNELS,CONV3dOUTPUT_CHANNELS,CONV3D_PADDING,
 CONV3d_KERNEL,CONV3d_STRIDE,IMAGE_TRANSFORMS,BATCH_SIZE,SHUFFLE,FRONTEND_POOL_KERNEL,
 FRONTEND_POOL_STRIDE,FRONTEND_POOL_PADDING,RESNET_MODEL,PRE_TRAIN_RESNET,
-ENCODER_REPRESENTATION_SIZE,LSTM_HIDDEN_SIZE,FRAME_COUNT,LSTM_LAYERS,NUM_CLASSES)
+ENCODER_REPRESENTATION_SIZE,LSTM_HIDDEN_SIZE,FRAME_COUNT,LSTM_LAYERS,NUM_CLASSES,BACKEND_TYPE,
+BN_SIZE,CONV1_KERNEL,CONV1_STRIDE,CONV2_KERNEL,CONV2_STRIDE,MAX_POOL1_KERNEL,MAX_POOL1_STRIDE
+)
 from torch.utils.data import DataLoader
 
 if __name__ == "__main__":
@@ -28,17 +30,33 @@ if __name__ == "__main__":
         "preTrain" : PRE_TRAIN_RESNET,
         "frames" : FRAME_COUNT
     }
-    paramsDecoder = {
+    if BACKEND_TYPE == "temporal CNN":
+        paramsDecoder = {
+            "conv1_kernel" : CONV1_KERNEL,
+            "conv1_stride" : CONV1_STRIDE,
+            "conv2_kernel" : CONV2_KERNEL,
+            "conv2_stride" : CONV2_STRIDE,
+            "max_pool1_kernel" : MAX_POOL1_KERNEL,
+            "max_pool1_stride" : MAX_POOL1_STRIDE,
+            "bn_size" : BN_SIZE,
+            "inputFeatures" : ENCODER_REPRESENTATION_SIZE,
+            "hiddenDimensions" :  LSTM_HIDDEN_SIZE,
+            "frames" : FRAME_COUNT,
+            "lstmLayers" : LSTM_LAYERS,
+            "classes" : NUM_CLASSES
+    }
+    else :
+        paramsDecoder = {
+
         "inputFeatures" : ENCODER_REPRESENTATION_SIZE,
         "hiddenDimensions" :  LSTM_HIDDEN_SIZE,
         "frames" : FRAME_COUNT,
         "lstmLayers" : LSTM_LAYERS,
         "classes" : NUM_CLASSES
-
     }
+    
     lipreaderModel = Lipreader(paramsEncoder,paramsDecoder)
-    lipreaderModel.getModelDetails()
     for i,batch in enumerate(dataLoader):
-        print(lipreaderModel(batch[0]).shape)
+        lipreaderModel(batch[0]).shape
     print("Everything Working")
     
