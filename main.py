@@ -28,7 +28,9 @@ if __name__ == "__main__":
         "poolPadding" : FRONTEND_POOL_PADDING,
         "resnetModel" : RESNET_MODEL,
         "preTrain" : PRE_TRAIN_RESNET,
-        "frames" : FRAME_COUNT
+        "frames" : FRAME_COUNT,
+        "backend_type" : BACKEND_TYPE
+
     }
     if BACKEND_TYPE == "temporal CNN":
         paramsDecoder = {
@@ -43,7 +45,10 @@ if __name__ == "__main__":
             "hiddenDimensions" :  LSTM_HIDDEN_SIZE,
             "frames" : FRAME_COUNT,
             "lstmLayers" : LSTM_LAYERS,
-            "classes" : NUM_CLASSES
+            "classes" : NUM_CLASSES,
+            "backend_type" : BACKEND_TYPE
+
+            
     }
     else :
         paramsDecoder = {
@@ -52,11 +57,15 @@ if __name__ == "__main__":
         "hiddenDimensions" :  LSTM_HIDDEN_SIZE,
         "frames" : FRAME_COUNT,
         "lstmLayers" : LSTM_LAYERS,
-        "classes" : NUM_CLASSES
+        "classes" : NUM_CLASSES,
+        "backend_type" : BACKEND_TYPE
+
     }
     
-    lipreaderModel = Lipreader(paramsEncoder,paramsDecoder)
+    lipreader = Lipreader(paramsEncoder,paramsDecoder)
     for i,batch in enumerate(dataLoader):
-        lipreaderModel(batch[0]).shape
+        op = lipreader(batch[0])
+    loss = lipreader.loss(op,torch.LongTensor(1).random_(0, 500))
+    print("Current loss: ",loss.item())
     print("Everything Working")
     
