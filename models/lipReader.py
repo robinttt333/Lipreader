@@ -18,4 +18,3 @@ class Lipreader(nn.Module):
     def getModelDetails(self):
         for param in self.state_dict():
             print(param,self.state_dict()[param].shape)
-    
