@@ -2,6 +2,7 @@ import torch.nn as nn
 from .encoder import Seq2SeqEncoder
 from .decoder import Seq2SeqDecoder
 from .LossFunction import NLLSequenceLoss
+import re
 class Lipreader(nn.Module):
     '''This is the main class for the model.The model is based on a seq2seq
     ie it takes in an input sequence of video frames and finally converts them
@@ -15,6 +16,19 @@ class Lipreader(nn.Module):
             self.Loss = nn.CrossEntropyLoss()
         else :
             self.Loss = NLLSequenceLoss()
+        
+        def weights_init(m):
+            classname = m.__class__.__name__
+            #Here re fails for Conv3dNetwork
+            if classname in ["Conv1d","Conv2d","Conv3d"]:
+                m.weight.data.normal_(0.0, 0.02)
+            elif re.search("BatchNorm[123]d", classname):
+                m.weight.data.fill_(1.0)
+                m.bias.data.fill_(0)
+            elif re.search("Linear", classname):
+                m.bias.data.fill_(0)
+
+        self.apply(weights_init)
 
     def forward(self,input):
         return self.Seq2SeqDecoder(self.Seq2SeqEncoder(input)) 
@@ -25,3 +39,5 @@ class Lipreader(nn.Module):
 
     def loss(self,input,target):
         return self.Loss(input,target)
+    
+
