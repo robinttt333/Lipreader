@@ -9,10 +9,10 @@ ENCODER_REPRESENTATION_SIZE,LSTM_HIDDEN_SIZE,FRAME_COUNT,LSTM_LAYERS,NUM_CLASSES
 BN_SIZE,CONV1_KERNEL,CONV1_STRIDE,CONV2_KERNEL,CONV2_STRIDE,MAX_POOL1_KERNEL,MAX_POOL1_STRIDE
 )
 from torch.utils.data import DataLoader
-
+import os
 if __name__ == "__main__":
     '''The path variable stores the path to the data.
-    Here we are only testing with a single file ie test.mp4 in this directory only and so we use "." 
+    Here we are only testing with a single file ie test.mp4 which is inside data/videos/test. 
     '''
     path = "."
     dataset = LRWDataset(path,IMAGE_TRANSFORMS)
@@ -46,9 +46,7 @@ if __name__ == "__main__":
             "frames" : FRAME_COUNT,
             "lstmLayers" : LSTM_LAYERS,
             "classes" : NUM_CLASSES,
-            "backend_type" : BACKEND_TYPE
-
-            
+            "backend_type" : BACKEND_TYPE   
     }
     else :
         paramsDecoder = {
@@ -59,7 +57,6 @@ if __name__ == "__main__":
         "lstmLayers" : LSTM_LAYERS,
         "classes" : NUM_CLASSES,
         "backend_type" : BACKEND_TYPE
-
     }
     
     lipreader = Lipreader(paramsEncoder,paramsDecoder)

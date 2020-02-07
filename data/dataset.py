@@ -5,19 +5,16 @@ import os
 from globalVariables import FRAME_COUNT,IMAGE_HEIGHT,IMAGE_WIDTH
 import torchvision.transforms as transforms
 import torch
-
+import re
 class LRWDataset(Dataset):
     def __init__(self,path,transforms=None):
         self.path = path
         self.transforms = transforms if transforms!=None else []
-        self.videos = []
-        self.labels = []
-        self.initVideos(path)
-        self.initLabels(path)
+        self.samples = []
+        self.init(path)
     
     def __getitem__(self,index):
-        video = self.videos[index]
-        path = os.path.join(self.path,video + '.mp4')
+        label,path = self.samples[index]
         processed = None
         frames = extractFramesFromSingleVideo(path)
         for i,frame in enumerate(frames):
@@ -28,17 +25,19 @@ class LRWDataset(Dataset):
                 processed = image.unsqueeze(0)
             else :
                 processed = torch.cat((processed,image.unsqueeze(0)),dim=1)
-        return processed,self.labels[index]
+        return processed,label
 
     def __len__(self):
-        return len(self.videos)
+        return len(self.samples)
 
-    def initLabels(self,path):
-        self.labels = [0]
-    
-    def initVideos(self,path):
-        videos = glob.glob(os.path.join(path,'*.mp4')) #Extarct all mp4 files in current dir 
-        for video in videos:
-            video = os.path.basename(video) #turns './test.mp4' to 'test.mp4' 
-            name,extension = os.path.splitext(video) #returns test and .mp4
-            self.videos.append(name)
+    def init(self,path):
+        """Our videos are stored as follows.Inside the main folder there are 500 folders,
+        1 for each label inside which are the files."""
+        path = os.path.join(path,"data/videos/")
+        labels = os.listdir(path)
+        for i,label in enumerate(labels):
+            dir = os.path.join(path,label)
+            videos = os.listdir(dir)
+            for video in videos:
+                if video.find(".mp4") :
+                    self.samples.append((i,os.path.join(dir,video)))
