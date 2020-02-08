@@ -7,10 +7,11 @@ import torchvision.transforms as transforms
 import torch
 import re
 class LRWDataset(Dataset):
-    def __init__(self,path,transforms=None):
+    def __init__(self,path,mode,transforms=None):
         self.path = path
         self.transforms = transforms if transforms!=None else []
         self.samples = []
+        self.mode = mode
         self.init(path)
     
     def __getitem__(self,index):
@@ -32,10 +33,12 @@ class LRWDataset(Dataset):
 
     def init(self,path):
         """Our videos are stored as follows.Inside the main folder there are 500 folders,
-        1 for each label inside which are the files."""
+        1 for each label inside which are the test,train and val folders and inside them are the files."""
+        
         path = os.path.join(path,"data/videos/")
         labels = os.listdir(path)
         for i,label in enumerate(labels):
+            label = label+"/" + self.mode
             dir = os.path.join(path,label)
             videos = os.listdir(dir)
             for video in videos:
