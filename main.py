@@ -6,6 +6,7 @@ from globalVariables import (IMAGE_CHANNELS, CONV3dOUTPUT_CHANNELS, CONV3D_PADDI
                              EPOCHS, COMPLETED_EPOCHS, LEARNING_RATE, MOMENTUM)
 
 from train import Trainer
+from validation import Validation
 from models.lipReader import Lipreader
 import os
 if __name__ == "__main__":
@@ -58,7 +59,6 @@ if __name__ == "__main__":
         "batch_size": BATCH_SIZE,
         "shuffle": SHUFFLE,
         "transforms": IMAGE_TRANSFORMS,
-        "mode": "train"
     }
     hyperParams = {
         "learningRate": LEARNING_RATE,
@@ -66,6 +66,7 @@ if __name__ == "__main__":
     }
     lipreader = Lipreader(paramsEncoder, paramsDecoder)
     trainer = Trainer(lipreader, hyperParams, dataParams)
-
+    validator = Validation(lipreader, hyperParams, dataParams)
     for epoch in range(COMPLETED_EPOCHS, EPOCHS):
         trainer.train()
+        validator.validate()
