@@ -37,7 +37,7 @@ LSTM_LAYERS = 2
 BATCH_SIZE = 10
 
 # Backend Settings
-BACKEND_TYPE = "lstm"  # Choose between "lstm" and "temporal CNN"
+BACKEND_TYPE = "temporal CNN"  # Choose between "lstm" and "temporal CNN"
 BN_SIZE = 256
 CONV1_KERNEL = 2
 CONV1_STRIDE = 2

@@ -68,5 +68,5 @@ if __name__ == "__main__":
     trainer = Trainer(lipreader, hyperParams, dataParams)
     validator = Validation(lipreader, hyperParams, dataParams)
     for epoch in range(COMPLETED_EPOCHS, EPOCHS):
-        trainer.train()
+        trainer.train(epoch)
         validator.validate()
