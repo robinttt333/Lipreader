@@ -6,6 +6,7 @@ from globalVariables import (IMAGE_CHANNELS, CONV3dOUTPUT_CHANNELS, CONV3D_PADDI
                              EPOCHS, COMPLETED_EPOCHS, LEARNING_RATE, MOMENTUM)
 
 from train import Trainer
+from models.lipReader import Lipreader
 import os
 if __name__ == "__main__":
     '''The path variable stores the path to the data.
@@ -63,7 +64,8 @@ if __name__ == "__main__":
         "learningRate": LEARNING_RATE,
         "momentum": MOMENTUM
     }
-    trainer = Trainer(paramsEncoder, paramsDecoder, hyperParams, dataParams)
+    lipreader = Lipreader(paramsEncoder, paramsDecoder)
+    trainer = Trainer(lipreader, hyperParams, dataParams)
 
     for epoch in range(COMPLETED_EPOCHS, EPOCHS):
         trainer.train()
