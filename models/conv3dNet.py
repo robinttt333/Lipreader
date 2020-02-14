@@ -9,8 +9,8 @@ class Conv3dNetwork(nn.Module):
     def __init__(self):
         super(Conv3dNetwork, self).__init__()
         self.conv3d = nn.Conv3d(
-            config.image["channels"], config.encoder["3dCNN"]["outputChannels"], config.encoder["3dCNN"]["kernel"],
-            config.encoder["3dCNN"]["stride"], config.encoder["3dCNN"]["padding"])
+            config.image["channels"], config.frontend["3dCNN"]["outputChannels"], config.frontend["3dCNN"]["kernel"],
+            config.frontend["3dCNN"]["stride"], config.frontend["3dCNN"]["padding"])
 
     def forward(self, input):
         input = self.conv3d(input)

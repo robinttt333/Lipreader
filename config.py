@@ -8,8 +8,8 @@ image = {
     "frames": 29,
 }
 
-# encoder settings
-encoder = {
+# frontend settings
+frontend = {
     "3dCNN": {
         "outputChannels": 64,
         "kernel": (5, 7, 7),
@@ -48,6 +48,8 @@ data = {
 backend = {
     "lstm": {
         "layers": 2,
+        "bidirectional": True,
+        "batchFirst": True
     },
     "temporal CNN": {
         "conv1Kernel": 2,

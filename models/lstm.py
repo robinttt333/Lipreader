@@ -1,10 +1,15 @@
 import torch.nn as nn
-class BidirectionalLSTM(nn.Module):
-    def __init__(self,paramsDecoder):
-        super(BidirectionalLSTM,self).__init__()
-        self.biLSTM = nn.LSTM(paramsDecoder["inputFeatures"],paramsDecoder["hiddenDimensions"],
-                    num_layers=paramsDecoder["lstmLayers"],batch_first=True,bidirectional=True) 
+import config
 
-    def forward(self,input):
-        lstmOutput,(hidden,cell) = self.biLSTM(input)
+
+class BidirectionalLSTM(nn.Module):
+    def __init__(self):
+        super(BidirectionalLSTM, self).__init__()
+        self.biLSTM = nn.LSTM(config.frontend["resnet"]["size"], config.backend["hiddenSize"],
+                              num_layers=config.backend["lstm"]["layers"],
+                              batch_first=config.backend["lstm"]["batchFirst"],
+                              bidirectional=config.backend["lstm"]["bidirectional"])
+
+    def forward(self, input):
+        lstmOutput, (hidden, cell) = self.biLSTM(input)
         return lstmOutput

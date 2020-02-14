@@ -5,15 +5,15 @@ from .resnet import Resnet
 import config
 
 
-class Seq2SeqEncoder(nn.Module):
-    '''This is the encoder class'''
+class Frontend(nn.Module):
+    '''This is the frontend class'''
 
     def __init__(self):
-        super(Seq2SeqEncoder, self).__init__()
+        super(Frontend, self).__init__()
         self.Conv3dNetwork = Conv3dNetwork()
-        self.norm = nn.BatchNorm3d(config.encoder["3dCNN"]["outputChannels"])
-        self.pool = nn.MaxPool3d(config.encoder["pool"]["kernel"], stride=config.encoder["pool"]["stride"],
-                                 padding=config.encoder["pool"]["padding"])
+        self.norm = nn.BatchNorm3d(config.frontend["3dCNN"]["outputChannels"])
+        self.pool = nn.MaxPool3d(config.frontend["pool"]["kernel"], stride=config.frontend["pool"]["stride"],
+                                 padding=config.frontend["pool"]["padding"])
         self.resnet = Resnet()
 
     def forward(self, input):

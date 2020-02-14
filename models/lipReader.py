@@ -1,7 +1,7 @@
 import torch.nn as nn
-from .encoder import Seq2SeqEncoder
-from .decoder import Seq2SeqDecoder
-from .LossFunction import NLLSequenceLoss
+from .frontend import Frontend
+from .backend import Backend
+from .lossFunction import NLLSequenceLoss
 import re
 from .validatorFunctions import temporalCNNValidator, lstmValidator
 import config
@@ -10,12 +10,12 @@ import config
 class Lipreader(nn.Module):
     '''This is the main class for the model.The model is based on a seq2seq
     ie it takes in an input sequence of video frames and finally converts them
-    into a vecotor of fixed dimensions and this is then fed into an encoder'''
+    into a vecotor of fixed dimensions and this is then fed into an frontend'''
 
     def __init__(self):
         super(Lipreader, self).__init__()
-        self.Seq2SeqEncoder = Seq2SeqEncoder()
-        self.Seq2SeqDecoder = Seq2SeqDecoder()
+        self.Frontend = Frontend()
+        self.Backend = Backend()
 
         if config.backend["type"] == "temporal CNN":
             self.Loss = nn.CrossEntropyLoss()
@@ -38,7 +38,7 @@ class Lipreader(nn.Module):
         self.apply(weights_init)
 
     def forward(self, input):
-        return self.Seq2SeqDecoder(self.Seq2SeqEncoder(input))
+        return self.Backend(self.Frontend(input))
 
     def getModelDetails(self):
         for param in self.state_dict():

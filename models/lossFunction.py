@@ -11,7 +11,7 @@ class NLLSequenceLoss(nn.Module):
     def forward(self, input, target):
         loss = 0.0
         transposed = input.transpose(0, 1).contiguous()
-        for i in range(0, config.image["fra,es"]):
+        for i in range(0, config.image["frames"]):
             loss += self.criterion(transposed[i], target)
 
         return loss

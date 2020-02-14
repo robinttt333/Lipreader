@@ -8,18 +8,18 @@ of lstm.
 """
 
 
-class Seq2SeqDecoder(nn.Module):
-    '''This is the decoder class'''
+class Backend(nn.Module):
+    '''This is the backend class'''
 
     def __init__(self):
-        super(Seq2SeqDecoder, self).__init__()
+        super(Backend, self).__init__()
         if config.backend["type"] == "temporal CNN":
             self.model = nn.Sequential(
                 TemporalCNN(),
                 nn.Linear(config.backend["hiddenSize"],
                           config.backend["classes"]),
             )
-        elif config.backend["backend_type"] == "lstm":
+        elif config.backend["type"] == "lstm":
             self.model = nn.Sequential(
                 BidirectionalLSTM(),
                 nn.Linear(config.backend["hiddenSize"]
@@ -27,7 +27,7 @@ class Seq2SeqDecoder(nn.Module):
                 nn.LogSoftmax(dim=2)
             )
 
-    '''This takes in the output of the encoder ie a vector with fixed dimensions'''
+    '''This takes in the output of the frontend ie a vector with fixed dimensions'''
 
     def forward(self, input):
         return self.model(input)
