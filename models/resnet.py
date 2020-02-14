@@ -1,24 +1,25 @@
 from torchvision.models import resnet
 import torch.nn as nn
-from globalVariables import CONV3dOUTPUT_CHANNELS, FRAME_COUNT, ENCODER_REPRESENTATION_SIZE
+import config
 
 
 class Resnet(nn.Module):
-    def __init__(self, model, preTrain):
+    def __init__(self):
         super(Resnet, self).__init__()
-        self.model = self.initModel(model, preTrain)
+        self.model = self.initModel(
+            config.encoder["resnet"]["model"], config.encoder["resnet"]["preTrain"])
         """By default the pytorch resnet models take in 3 channels but we have 64 so we need to modify 
-        the first layer input to 64"""
-        self.model.conv1 = nn.Conv2d(CONV3dOUTPUT_CHANNELS, 64, kernel_size=7, stride=2, padding=3,
+        the first layer input to 64 instead of 3"""
+        self.model.conv1 = nn.Conv2d(config.encoder["3dCNN"]["outputChannels"], 64, kernel_size=7, stride=2, padding=3,
                                      bias=False)
 
     def initModel(self, model, preTrain):
         if model == "18":
-            return resnet.resnet18(preTrain, num_classes=ENCODER_REPRESENTATION_SIZE)
+            return resnet.resnet18(preTrain, num_classes=config.encoder["resnet"]["size"])
         elif model == "34":
-            return resnet.resnet34(preTrain, num_classes=ENCODER_REPRESENTATION_SIZE)
+            return resnet.resnet34(preTrain, num_classes=config.encoder["resnet"]["size"])
         elif model == "50":
-            return resnet.resnet50(preTrain, num_classes=ENCODER_REPRESENTATION_SIZE)
+            return resnet.resnet50(preTrain, num_classes=config.encoder["resnet"]["size"])
 
     def forward(self, input):
         """ input shape is batch * channels * frames * height * width. We need to convert this
@@ -30,7 +31,9 @@ class Resnet(nn.Module):
         """
         height, width = input.shape[3], input.shape[4]
         input = input.transpose(1, 2)
-        vector4d = input.reshape(-1, CONV3dOUTPUT_CHANNELS, height, width)
+        vector4d = input.reshape(-1,
+                                 config.encoder["3dCNN"]["outputChannels"], height, width)
         output = self.model(vector4d)
-        output = output.view(-1, FRAME_COUNT, ENCODER_REPRESENTATION_SIZE)
+        output = output.view(-1,
+                             config.image["frames"], config.encoder["resnet"]["size"])
         return output

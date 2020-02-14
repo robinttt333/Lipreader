@@ -4,24 +4,24 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from torch import optim
 from datetime import datetime, timedelta
+import config
 
 
 class Trainer():
-    def __init__(self, lipreader, hyperParams, dataParams):
+    def __init__(self, lipreader):
         # Check if gpu is available
         self.device = "gpu:0" if torch.cuda.is_available() else "cpu"
         self.model = lipreader
 
         if torch.cuda.device_count() > 1:
             self.model = nn.DataParallel(self.model).cuda()
-        self.dataset = LRWDataset(
-            dataParams["path"], "train", dataParams["transforms"])
+        self.dataset = LRWDataset("train")
         # set drop_last = True once the entire dataset is available
-        self.dataLoader = DataLoader(self.dataset, batch_size=dataParams["batch_size"],
-                                     shuffle=dataParams["shuffle"])
-        self.learningRate = hyperParams["learningRate"]
-        self.momentum = hyperParams["momentum"]
-        self.batchSize = dataParams["batch_size"]
+        self.dataLoader = DataLoader(self.dataset, batch_size=config.data["batchSize"],
+                                     shuffle=config.data["shuffle"])
+        self.learningRate = config.hyperParams["learningRate"]
+        self.momentum = config.hyperParams["momentum"]
+        self.batchSize = config.data["batchSize"]
 
     def train(self, epoch):
         optimizer = optim.SGD(self.model.parameters(), lr=self.learningRate,

@@ -4,6 +4,7 @@ from .decoder import Seq2SeqDecoder
 from .LossFunction import NLLSequenceLoss
 import re
 from .validatorFunctions import temporalCNNValidator, lstmValidator
+import config
 
 
 class Lipreader(nn.Module):
@@ -11,11 +12,12 @@ class Lipreader(nn.Module):
     ie it takes in an input sequence of video frames and finally converts them
     into a vecotor of fixed dimensions and this is then fed into an encoder'''
 
-    def __init__(self, paramsEncoder, paramsDecoder):
+    def __init__(self):
         super(Lipreader, self).__init__()
-        self.Seq2SeqEncoder = Seq2SeqEncoder(paramsEncoder)
-        self.Seq2SeqDecoder = Seq2SeqDecoder(paramsDecoder)
-        if paramsDecoder["backend_type"] == "temporal CNN":
+        self.Seq2SeqEncoder = Seq2SeqEncoder()
+        self.Seq2SeqDecoder = Seq2SeqDecoder()
+
+        if config.backend["type"] == "temporal CNN":
             self.Loss = nn.CrossEntropyLoss()
             self.Validate = temporalCNNValidator
         else:
