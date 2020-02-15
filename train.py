@@ -23,6 +23,7 @@ class Trainer():
         self.batchSize = config.data["batchSize"]
 
     def train(self, epoch):
+        self.model = self.model.train()
         optimizer = optim.SGD(self.model.parameters(), lr=self.learningRate,
                               momentum=self.momentum)
 

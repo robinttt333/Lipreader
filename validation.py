@@ -18,6 +18,7 @@ class Validation():
 
     def validate(self):
         correct = 0
+        self.model = self.model.eval()
         for _, batch in enumerate(self.valiadtionDataLoader):
             input, target = batch
             input = input.to(self.device)
