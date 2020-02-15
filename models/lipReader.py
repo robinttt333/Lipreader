@@ -5,6 +5,7 @@ from .lossFunction import NLLSequenceLoss
 import re
 from .validatorFunctions import temporalCNNValidator, lstmValidator
 import config
+from torchsummary import summary
 
 
 class Lipreader(nn.Module):
@@ -40,9 +41,9 @@ class Lipreader(nn.Module):
     def forward(self, input):
         return self.Backend(self.Frontend(input))
 
-    def getModelDetails(self):
-        for param in self.state_dict():
-            print(param, self.state_dict()[param].shape)
+    def getModelSummary(self):
+        summary(self, input_size=(
+            config.image["channels"], config.image["frames"], config.image["height"], config.image["width"],))
 
     def loss(self, input, target):
         return self.Loss(input, target)
