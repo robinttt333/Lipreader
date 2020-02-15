@@ -4,7 +4,7 @@ from validation import Validation
 from models.lipReader import Lipreader
 from tqdm import tqdm
 from datetime import datetime, timedelta
-
+from savingAndLoading import saveModel
 if __name__ == "__main__":
     lipreader = Lipreader()
     trainer = Trainer(lipreader)
@@ -16,3 +16,4 @@ if __name__ == "__main__":
             trainer.train(epoch)
             validator.validate()
             t.update()
+            saveModel(lipreader, epoch)

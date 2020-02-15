@@ -74,3 +74,7 @@ training = {
     "epochs": 1,
     "completedEpochs": 0,
 }
+# Saving and Loading the model
+savingAndLoading = {
+    "dir": "savedStates",
+}
