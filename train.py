@@ -3,7 +3,6 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from torch import optim
-from datetime import datetime, timedelta
 import config
 
 
@@ -26,11 +25,7 @@ class Trainer():
     def train(self, epoch):
         optimizer = optim.SGD(self.model.parameters(), lr=self.learningRate,
                               momentum=self.momentum)
-        print("Started training at", datetime.now())
 
-        correctOutputs = 0
-        totalVideos = 0
-        totalLoss = 0.0
         for _, batch in enumerate(self.dataLoader):
             optimizer.zero_grad()
             input, target = batch
@@ -40,13 +35,3 @@ class Trainer():
             loss = self.model.loss(output, target)
             loss.backward()
             optimizer.step()
-
-            correctOutputs += self.model.validate(output, target)
-            totalVideos += len(batch)
-            totalLoss += loss.data * len(batch)
-
-        print(f"Epoch number {epoch+1} completed")
-        print(f"Total samples: {totalVideos}")
-        print(f"Correct samples: {correctOutputs}")
-        print(f"Avg loss {totalLoss/totalVideos}")
-        print(f"Avg acc {totalLoss/totalVideos}")

@@ -71,6 +71,6 @@ hyperParams = {
 
 # Training
 training = {
-    "epochs": 1,
+    "epochs": 10,
     "completedEpochs": 0,
 }

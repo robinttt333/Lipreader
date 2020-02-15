@@ -2,12 +2,17 @@ import config
 from train import Trainer
 from validation import Validation
 from models.lipReader import Lipreader
-import os
+from tqdm import tqdm
+from datetime import datetime, timedelta
+
 if __name__ == "__main__":
     lipreader = Lipreader()
     trainer = Trainer(lipreader)
     validator = Validation(lipreader)
 
-    for epoch in range(config.training["completedEpochs"], config.training["epochs"]):
-        trainer.train(epoch)
-        validator.validate()
+    print("Started training at", datetime.now())
+    with tqdm(total=config.training["epochs"], desc="Epochs", position=0) as t:
+        for epoch in range(config.training["completedEpochs"], config.training["epochs"]):
+            trainer.train(epoch)
+            validator.validate()
+            t.update()

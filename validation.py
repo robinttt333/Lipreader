@@ -25,7 +25,7 @@ class Validation():
             output = self.model(input)
 
             correct += self.model.validate(output, label)
-
+        print("VALIDATION STATS:")
         print("Number of correct outputs ", correct)
         print("Percentage of correct outputs",
               (correct/len(self.validationDataset))*100)
