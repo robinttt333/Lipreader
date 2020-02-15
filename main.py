@@ -17,4 +17,3 @@ if __name__ == "__main__":
             validator.validate()
             t.update()
             saveModel(lipreader, epoch+1)
-    loadModel(1)

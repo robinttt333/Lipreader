@@ -12,6 +12,13 @@ def getUniqueName(epoch):
 
 
 def saveModel(model, epoch):
+    # print(next(iter(model.state_dict().items())))
+    # print(next(iter(model.named_parameters())))
+    """Above 2 statements show that state_dict does not contain grad status of the params but 
+    names params does.So we save grad status separately.If we do model.load_state_dict all grads
+    will be reset to True by default.This is not what we want as we wish to train backend 
+    and frontend separately ie we wish to freeze some layers by making requires_grad = False.  
+    """
     print("Saving your model...")
     dir = config.savingAndLoading["dir"]
     if not os.path.isdir(dir):
