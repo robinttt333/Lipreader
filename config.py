@@ -71,8 +71,7 @@ hyperParams = {
 
 # Training
 training = {
-    "epochs": 1,
-    "completedEpochs": 0,
+    "epochs": 10,
 }
 # Saving and Loading the model
 savingAndLoading = {
