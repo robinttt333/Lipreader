@@ -7,16 +7,16 @@ def extractFramesFromSingleVideo(video):
     frames = []
     video = cv2.VideoCapture(video)
     success, image = video.read()
-    frames.append(torch.FloatTensor(image))
-    '''The above step of specifying dtype is important because the weights are initialized by default 
-    as float32 dtype and data is int type.Thus due to incompatibility between the 2 types we will get an
-    error.We will apply a proper fix for this later.
-    '''
+    frames.append(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    """PIL uses RGB format but cv2 uses BGR format for 3 channel images and since in our
+    transforms we are converting each frame into PIL image before doing anything on it 
+    this step becomes becessary ie using cv2.COLOR_BGR2RGB.
+    """
     i = 1
     # We extract 29 frames in total from a single video
     while success and i < config.image["frames"]:
         i += 1
         success, image = video.read()
-        imageTensor = torch.FloatTensor(image)
-        frames.append(imageTensor)
+        frames.append(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+
     return frames  # list of n   256 * 256 * 3

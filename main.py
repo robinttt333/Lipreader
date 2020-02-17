@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from savingAndLoading import saveModel, loadModel
 import argparse
 import os
+
 if __name__ == "__main__":
     """https://docs.python.org/3.3/library/argparse.html"""
     """We store the last epoch in the trained model.So we can use that to set

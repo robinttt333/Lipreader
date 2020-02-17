@@ -37,9 +37,9 @@ data = {
     "path": ".",
     "transforms": [
         transforms.ToPILImage(),
-        # Cropping to be done to 112 * 112 based on the research paper
-        transforms.CenterCrop((112, 112)),
         transforms.Grayscale(num_output_channels=1),
+        # Cropping to be done to 112 * 112 based on the research paper
+        transforms.CenterCrop(112),
         transforms.ToTensor(),
         transforms.Normalize([0.4161, ], [0.1688, ]),
     ]
