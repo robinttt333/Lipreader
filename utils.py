@@ -22,4 +22,7 @@ def checkIfFileExists(fileName):
 
 
 def stageChangeRequired(stage, epoch):
-    return True if (stage == 1 and epoch == 1) or (stage == 2 and epoch == 5) and (stage == 3 and epoch == 30) else False
+    stage1Epochs = config.training['Stage 1']["epochs"]
+    stage2Epochs = config.training['Stage 2']["epochs"]
+    stage3Epochs = config.training['Stage 3']["epochs"]
+    return True if (stage == 1 and epoch == stage1Epochs) or (stage == 2 and epoch == stage2Epochs) or (stage == 3 and epoch == stage3Epochs) else False

@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from savingAndLoading import saveModel, loadModel
 import argparse
 import os
-from utils import getStageFromFileName, getLastEpochFromFileName, checkIfFileExists
+from utils import getStageFromFileName, getLastEpochFromFileName, checkIfFileExists, stageChangeRequired
 
 if __name__ == "__main__":
     """https://docs.python.org/3.3/library/argparse.html"""
@@ -23,13 +23,18 @@ if __name__ == "__main__":
     fileName = args.load
     startEpoch = 1
     stage = 1
-
+    changeStage = False
     if fileName is not None:
         checkIfFileExists(fileName)
-        startEpoch = getLastEpochFromFileName(fileName) + 1
+        lastEpoch = getLastEpochFromFileName(fileName)
+        startEpoch = lastEpoch + 1
         stage = getStageFromFileName(fileName)
+        if stageChangeRequired(stage, lastEpoch):
+            changeStage = True
+            startEpoch = 1
+            stage += 1
         lipreader = Lipreader(stage)
-        lipreader = loadModel(lipreader, fileName)
+        lipreader = loadModel(lipreader, fileName, changeStage)
     else:
         lipreader = Lipreader()
 

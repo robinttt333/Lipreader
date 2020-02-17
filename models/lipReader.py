@@ -16,7 +16,7 @@ class Lipreader(nn.Module):
     def __init__(self, stage=1):
         super(Lipreader, self).__init__()
         self.Frontend = Frontend()
-        self.Backend = Backend()
+        self.Backend = Backend(stage)
         self.stage = "Stage " + str(stage)
 
         if self.stage == "Stage 1":
@@ -47,6 +47,7 @@ class Lipreader(nn.Module):
             config.image["channels"], config.image["frames"], config.image["height"], config.image["width"],))
 
     def loss(self, input, target):
+        print(input.shape, target.shape)
         return self.Loss(input, target)
 
     def validate(self, input, target):

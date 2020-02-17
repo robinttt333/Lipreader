@@ -2,7 +2,7 @@ import config
 import os
 import torch
 from models.lipReader import Lipreader
-from utils import getLastEpochFromFileName, stageChangeRequired, getStageFromFileName, changeStage
+from utils import getLastEpochFromFileName, stageChangeRequired, getStageFromFileName
 
 
 def getUniqueName(epoch, stage):
@@ -41,7 +41,7 @@ def updateGradStatus(model, state):
     return model
 
 
-def loadModel(model, fileName):
+def loadModel(model, fileName, change=False):
     """file is the full path of file and fileName is only its name"""
     dir = config.savingAndLoading["dir"]
     file = os.path.join(os.path.curdir, dir, fileName)
@@ -56,9 +56,25 @@ def loadModel(model, fileName):
 
         This check is required so that the appropriate layers are frozen and unfrozen
     """
-    if stageChangeRequired(stage, epoch):
-        changeStage(model, stage)
-    else:
-        print(f"Loading model with last completed epoch as : {epoch}")
-        model.load_state_dict(state["state_dict"])
-        return updateGradStatus(model, state)
+    if change:
+        print(f"Updating the stage from {stage} ---> {stage+1}")
+        return changeStage(model, stage, state)
+    print(f"Loading model with last completed epoch as : {epoch}")
+    model.load_state_dict(state["state_dict"])
+    return updateGradStatus(model, state)
+
+
+def changeStage(model, stage, pretrainedDict):
+    currentStateDict = model.state_dict()
+    pretrainedDict = {k: v for k,
+                      v in pretrainedDict.items() if k in currentStateDict}
+    currentStateDict.update(pretrainedDict)
+    model.load_state_dict(currentStateDict)
+
+    if stage == 1:
+        for param, tensor in model.Frontend.named_parameters():
+            tensor.requires_grad_(False)
+    elif stage == 2:
+        for param, tensor in model.Frontend.named_parameters():
+            tensor.requires_grad_(True)
+    return model

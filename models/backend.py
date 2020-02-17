@@ -11,15 +11,15 @@ of lstm.
 class Backend(nn.Module):
     '''This is the backend class'''
 
-    def __init__(self):
+    def __init__(self, stage):
         super(Backend, self).__init__()
-        if config.backend["type"] == "temporal CNN":
+        if stage == 1:
             self.model = nn.Sequential(
                 TemporalCNN(),
                 nn.Linear(config.backend["hiddenSize"],
                           config.backend["classes"]),
             )
-        elif config.backend["type"] == "lstm":
+        else:
             self.model = nn.Sequential(
                 BidirectionalLSTM(),
                 nn.Linear(config.backend["hiddenSize"]

@@ -60,7 +60,6 @@ backend = {
         "conv2Stride": 2,
     },
     "hiddenSize": 256,
-    "type": "temporal CNN",  # Choose between "lstm" and "temporal CNN"
     "classes": 500
 }
 # Hyperparams
@@ -78,20 +77,17 @@ training = {
         "Backend": "temporal CNN",
         "learningRate": .003,
         "epochs": 2,
-        "freeze": None
     },
     "Stage 2":
     {
         "Backend": "lstm",
         "learningRate": .003,
-        "epochs": 5,
-        "freeze": "Backend"
+        "epochs": 1,
     },
     "Stage 3": {
         "Backend": "lstm",
         "learningRate": .0005,
-        "epochs": 30,
-        "freeze": None
+        "epochs": 1,
     }
 }
 # Saving and Loading the model
