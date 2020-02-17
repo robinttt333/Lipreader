@@ -18,7 +18,6 @@ def saveModel(model, epoch):
     will be reset to True by default.This is not what we want as we wish to train backend 
     and frontend separately ie we wish to freeze some layers by making requires_grad = False.  
     """
-    print("Saving your model...")
     dir = config.savingAndLoading["dir"]
     if not os.path.isdir(dir):
         os.mkdir(dir)
@@ -33,7 +32,7 @@ def saveModel(model, epoch):
     }
     file = os.path.join(os.path.curdir, dir, getUniqueName(epoch))
     torch.save(state, file)
-    print(f"Model saved after epoch {epoch}")
+    print(f"Model saved as Epoch{epoch}.pt")
 
 
 def updateGradStatus(model, state):
@@ -42,11 +41,16 @@ def updateGradStatus(model, state):
     return model
 
 
-def loadModel(epoch):
-    print(f"Loading model after {epoch} epochs")
+def loadModel(model, fileName):
+    """First check if the file exists"""
     dir = config.savingAndLoading["dir"]
-    file = os.path.join(os.path.curdir, dir, getUniqueName(epoch))
-    model = Lipreader()
+    file = os.path.join(os.path.curdir, dir, fileName)
+    if not os.path.exists(file):
+        raise Exception(
+            "No such file exists in the specified path...Please see the 'dir' option under savingAndLoading in the config")
+
     state = torch.load(file)
+    epoch = state["lastEpoch"]
+    print(f"Loading model with last completed epoch as : {epoch}")
     model.load_state_dict(state["state_dict"])
-    return updateGradStatus(model, state)
+    return updateGradStatus(model, state), epoch
