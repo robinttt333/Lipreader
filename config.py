@@ -70,10 +70,34 @@ hyperParams = {
 }
 
 # Training
+"""We have 3 stages of training as mentioned in the paper and 
+https://github.com/tstafylakis/Lipreading-ResNet which are as follows:
+"""
 training = {
     "epochs": 10,
+    "Stage 1":
+    {
+        "Backend": "temporal CNN",
+        "learningRate": .003,
+        "epochs": 30,
+        "freeze": None
+    },
+    "Stage 2":
+    {
+        "Backend": "lstm",
+        "learningRate": .003,
+        "epochs": 5,
+        "freeze": "Backend"
+    },
+    "Stage 3": {
+        "Backend": "lstm",
+        "learningRate": .0005,
+        "epochs": 30,
+        "freeze": None
+    }
 }
 # Saving and Loading the model
 savingAndLoading = {
     "dir": "savedStates",
+
 }
