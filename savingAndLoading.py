@@ -1,12 +1,12 @@
 import config
 import os
 import torch
-from datetime import datetime
 from models.lipReader import Lipreader
+from utils import getLastEpochFromFileName, stageChangeRequired, getStageFromFileName, changeStage
 
 
-def getUniqueName(epoch):
-    filename = f"Epoch{epoch}.pt"
+def getUniqueName(epoch, stage):
+    filename = f"Epoch{epoch}_{stage}.pt"
     return filename
 
 
@@ -28,11 +28,11 @@ def saveModel(model, epoch):
     state = {
         "state_dict": model.state_dict(),
         "grad_states": grad_states,
-        "lastEpoch": epoch
     }
-    file = os.path.join(os.path.curdir, dir, getUniqueName(epoch))
+    stage = int(model.stage.split()[1])
+    file = os.path.join(os.path.curdir, dir, getUniqueName(epoch, stage))
     torch.save(state, file)
-    print(f"Model saved as Epoch{epoch}.pt")
+    print(f"Model saved as Epoch{epoch}_{stage}.pt")
 
 
 def updateGradStatus(model, state):
@@ -42,15 +42,23 @@ def updateGradStatus(model, state):
 
 
 def loadModel(model, fileName):
-    """First check if the file exists"""
+    """file is the full path of file and fileName is only its name"""
     dir = config.savingAndLoading["dir"]
     file = os.path.join(os.path.curdir, dir, fileName)
-    if not os.path.exists(file):
-        raise ValueError(
-            "No such file exists in the specified path...Please see the 'dir' option under savingAndLoading in the config")
-
     state = torch.load(file)
-    epoch = state["lastEpoch"]
-    print(f"Loading model with last completed epoch as : {epoch}")
-    model.load_state_dict(state["state_dict"])
-    return updateGradStatus(model, state), epoch
+    epoch = getLastEpochFromFileName(fileName)
+    stage = getStageFromFileName(fileName)
+    """
+        stage changes take place when :
+        1) If model is in stage 1 and completes 30 epochs
+        2) If model is in stage 2 and completes 5 epochs
+        3) If model is  in stage 3 and completes 30 epochs
+
+        This check is required so that the appropriate layers are frozen and unfrozen
+    """
+    if stageChangeRequired(stage, epoch):
+        changeStage(model, stage)
+    else:
+        print(f"Loading model with last completed epoch as : {epoch}")
+        model.load_state_dict(state["state_dict"])
+        return updateGradStatus(model, state)

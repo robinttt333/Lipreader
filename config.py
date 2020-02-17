@@ -65,7 +65,6 @@ backend = {
 }
 # Hyperparams
 hyperParams = {
-    "learningRate": .003,
     "momentum": .9
 }
 
@@ -74,12 +73,11 @@ hyperParams = {
 https://github.com/tstafylakis/Lipreading-ResNet which are as follows:
 """
 training = {
-    "epochs": 10,
     "Stage 1":
     {
         "Backend": "temporal CNN",
         "learningRate": .003,
-        "epochs": 30,
+        "epochs": 2,
         "freeze": None
     },
     "Stage 2":

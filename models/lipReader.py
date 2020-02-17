@@ -13,12 +13,13 @@ class Lipreader(nn.Module):
     ie it takes in an input sequence of video frames and finally converts them
     into a vecotor of fixed dimensions and this is then fed into an frontend'''
 
-    def __init__(self):
+    def __init__(self, stage=1):
         super(Lipreader, self).__init__()
         self.Frontend = Frontend()
         self.Backend = Backend()
+        self.stage = "Stage " + str(stage)
 
-        if config.backend["type"] == "temporal CNN":
+        if self.stage == "Stage 1":
             self.Loss = nn.CrossEntropyLoss()
             self.Validate = temporalCNNValidator
         else:

@@ -11,14 +11,13 @@ class Trainer():
         # Check if gpu is available
         self.device = "gpu:0" if torch.cuda.is_available() else "cpu"
         self.model = lipreader
-
         if torch.cuda.device_count() > 1:
             self.model = nn.DataParallel(self.model).cuda()
         self.dataset = LRWDataset("train")
         # set drop_last = True once the entire dataset is available
         self.dataLoader = DataLoader(self.dataset, batch_size=config.data["batchSize"],
                                      shuffle=config.data["shuffle"])
-        self.learningRate = config.hyperParams["learningRate"]
+        self.learningRate = config.training[self.model.stage]["learningRate"]
         self.momentum = config.hyperParams["momentum"]
         self.batchSize = config.data["batchSize"]
 

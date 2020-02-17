@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from savingAndLoading import saveModel, loadModel
 import argparse
 import os
+from utils import getStageFromFileName, getLastEpochFromFileName, checkIfFileExists
 
 if __name__ == "__main__":
     """https://docs.python.org/3.3/library/argparse.html"""
@@ -19,20 +20,25 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    modelPath = args.load
+    fileName = args.load
     startEpoch = 1
+    stage = 1
 
-    lipreader = Lipreader()
-    if modelPath is not None:
-        lipreader, lastEpoch = loadModel(lipreader, modelPath)
-        startEpoch = lastEpoch + 1
+    if fileName is not None:
+        checkIfFileExists(fileName)
+        startEpoch = getLastEpochFromFileName(fileName) + 1
+        stage = getStageFromFileName(fileName)
+        lipreader = Lipreader(stage)
+        lipreader = loadModel(lipreader, fileName)
+    else:
+        lipreader = Lipreader()
 
     trainer = Trainer(lipreader)
     validator = Validation(lipreader)
-
+    totalEpochs = config.training["Stage "+str(stage)]["epochs"]
     print("Started training at", datetime.now())
-    with tqdm(total=config.training["epochs"]-startEpoch+1, desc="Epochs", position=0) as t:
-        for epoch in range(startEpoch-1, config.training["epochs"]):
+    with tqdm(total=totalEpochs-startEpoch+1, desc="Epochs", position=0) as t:
+        for epoch in range(startEpoch-1, totalEpochs):
             trainer.train(epoch)
             validator.validate()
             t.update()
