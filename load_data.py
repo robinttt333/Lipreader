@@ -10,7 +10,8 @@ def extractFramesFromSingleVideo(video):
     frames.append(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     """PIL uses RGB format but cv2 uses BGR format for 3 channel images and since in our
     transforms we are converting each frame into PIL image before doing anything on it 
-    this step becomes becessary ie using cv2.COLOR_BGR2RGB.
+    this step becomes becessary ie using cv2.COLOR_BGR2RGB.Refer below link for more:
+    http://stackoverflow.com/questions/43232813/convert-opencv-image-format-to-pil-image-format
     """
     i = 1
     # We extract 29 frames in total from a single video
