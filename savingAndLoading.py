@@ -2,12 +2,7 @@ import config
 import os
 import torch
 from models.lipReader import Lipreader
-from utils import getLastEpochFromFileName, stageChangeRequired, getStageFromFileName
-
-
-def getUniqueName(epoch, stage):
-    filename = f"Epoch{epoch}_{stage}.pt"
-    return filename
+from utils import getLastEpochFromFileName, stageChangeRequired, getStageFromFileName, getPath, getUniqueName
 
 
 def saveModel(model, epoch):
@@ -18,9 +13,6 @@ def saveModel(model, epoch):
     will be reset to True by default.This is not what we want as we wish to train backend 
     and frontend separately ie we wish to freeze some layers by making requires_grad = False.  
     """
-    dir = config.savingAndLoading["dir"]
-    if not os.path.isdir(dir):
-        os.mkdir(dir)
     grad_states = {}
     for param, tensor in model.named_parameters():
         grad_states[param] = tensor.requires_grad
@@ -29,10 +21,10 @@ def saveModel(model, epoch):
         "state_dict": model.state_dict(),
         "grad_states": grad_states,
     }
-    stage = int(model.stage.split()[1])
-    file = os.path.join(os.path.curdir, dir, getUniqueName(epoch, stage))
+    file = os.path.join(getPath(epoch, model.stage),
+                        getUniqueName(epoch, model.stage))
     torch.save(state, file)
-    print(f"Model saved as Epoch{epoch}_{stage}.pt")
+    print(f"Model saved as Epoch{epoch}_{model.stage[-1]}.pt")
 
 
 def updateGradStatus(model, state):

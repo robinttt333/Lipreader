@@ -45,6 +45,7 @@ if __name__ == "__main__":
     with tqdm(total=totalEpochs-startEpoch+1, desc="Epochs", position=0) as t:
         for epoch in range(startEpoch-1, totalEpochs):
             trainer.train(epoch)
-            validator.validate()
+            validator.validate(epoch)
             t.update()
             saveModel(lipreader, epoch+1)
+        print(f"Successfully completed training of Stage {stage}")

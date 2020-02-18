@@ -47,7 +47,6 @@ class Lipreader(nn.Module):
             config.image["channels"], config.image["frames"], config.image["height"], config.image["width"],))
 
     def loss(self, input, target):
-        print(input.shape, target.shape)
         return self.Loss(input, target)
 
     def validate(self, input, target):
