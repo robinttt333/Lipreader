@@ -16,10 +16,10 @@ def getLastEpochFromFileName(fileName):
 
 def checkIfFileExists(fileName):
     dir = config.savingAndLoading["dir"]
-    file = os.path.join(os.path.curdir, dir, fileName)
+    file = os.path.join(os.path.curdir, dir, fileName.split(".")[0], fileName)
     if not os.path.exists(file):
-        raise ValueError(
-            "No such file exists in the specified path...Please see the 'dir' option under savingAndLoading in the config and ensure that your file is present there")
+        return 0
+    return 1
 
 
 def stageChangeRequired(stage, epoch):

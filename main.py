@@ -25,7 +25,9 @@ if __name__ == "__main__":
     stage = 1
     changeStage = False
     if fileName is not None:
-        checkIfFileExists(fileName)
+        if not checkIfFileExists(fileName):
+            raise ValueError(
+                "No such file exists in the specified path...Please see the 'dir' option under savingAndLoading in the config and ensure that your file is present there")
         lastEpoch = getLastEpochFromFileName(fileName)
         startEpoch = lastEpoch + 1
         stage = getStageFromFileName(fileName)
@@ -37,7 +39,6 @@ if __name__ == "__main__":
         lipreader = loadModel(lipreader, fileName, changeStage)
     else:
         lipreader = Lipreader()
-
     trainer = Trainer(lipreader)
     validator = Validation(lipreader)
     totalEpochs = config.training["Stage "+str(stage)]["epochs"]

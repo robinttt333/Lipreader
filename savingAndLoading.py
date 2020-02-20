@@ -36,7 +36,7 @@ def updateGradStatus(model, state):
 def loadModel(model, fileName, change=False):
     """file is the full path of file and fileName is only its name"""
     dir = config.savingAndLoading["dir"]
-    file = os.path.join(os.path.curdir, dir, fileName)
+    file = os.path.join(os.path.curdir, dir, fileName.split(".")[0], fileName)
     state = torch.load(file)
     epoch = getLastEpochFromFileName(fileName)
     stage = getStageFromFileName(fileName)
