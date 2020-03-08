@@ -23,6 +23,20 @@ class LRWDataset(Dataset):
         frames = extractFramesFromSingleVideo(path)
         for i, frame in enumerate(frames):
             # print(frame.shape) # 256 * 256 * 3
+            """
+            According to tha paper we apply 2 transforms during training for augmentation.
+            These are random cop with +/- 5 pixels and horizontal flip
+            """
+            if self.mode == "train":
+                self.transforms = [
+                    transforms.ToPILImage(),
+                    transforms.Grayscale(num_output_channels=1),
+                    transforms.CenterCrop(122),
+                    transforms.RandomCrop(112),
+                    transforms.RandomHorizontalFlip(),
+                    transforms.ToTensor(),
+                    transforms.Normalize([0.4161, ], [0.1688, ]),
+                ]
             image = transforms.Compose(self.transforms)(frame)
             # print(image.shape) # 1 * 112 * 112
             if i == 0:
