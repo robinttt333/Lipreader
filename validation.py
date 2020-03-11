@@ -8,11 +8,8 @@ from utils import saveStatsToCSV
 
 class Validation():
     def __init__(self, lipreader):
-        self.device = "gpu:0" if torch.cuda.is_available() else "cpu"
+        # self.device = "gpu:0" if torch.cuda.is_available() else "cpu"
         self.model = lipreader
-
-        if torch.cuda.device_count() > 1:
-            self.model = nn.DataParallel(self.model).cuda()
         self.validationDataset = LRWDataset("val")
         self.valiadtionDataLoader = DataLoader(self.validationDataset, batch_size=config.data["batchSize"],
                                                shuffle=config.data["shuffle"])
@@ -22,8 +19,8 @@ class Validation():
         validationStats = []
         for _, batch in enumerate(self.valiadtionDataLoader):
             input, target = batch
-            input = input.to(self.device)
-            label = target.to(self.device)
+            input = input.cuda()
+            label = target.cuda()
             output = self.model(input)
             correct = self.model.validate(output, label)
             validationStat = {

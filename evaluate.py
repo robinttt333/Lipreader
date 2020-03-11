@@ -18,6 +18,8 @@ def evaluateVideo(modelFile, video):
             state = torch.load(file)
             model = Lipreader()
             model.load_state_dict(state["state_dict"])
+            if config.gpuAvailable:
+                model = model.cuda()
             model.eval()
             transforms = config.data["transforms"] if config.data["transforms"] != None else [
             ]
@@ -31,7 +33,7 @@ def evaluateVideo(modelFile, video):
                 else:
                     processed = torch.cat(
                         (processed, image.unsqueeze(0)), dim=1)
-
+            processed = processed.cuda()
             output = model(processed.unsqueeze(0)).data.max(dim=1)
             probability, label = round(
                 output.values.item(), 3), output.indices.item()

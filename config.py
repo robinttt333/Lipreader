@@ -1,5 +1,12 @@
 '''This is a file created to hold our global variables'''
 import torchvision.transforms as transforms
+import torch
+
+#GPU
+
+gpuAvailable = torch.cuda.is_available()
+deviceCount = torch.cuda.device_count()
+
 # Image features
 image = {
     "height": 256,
@@ -76,13 +83,13 @@ training = {
     {
         "Backend": "temporal CNN",
         "learningRate": .003,
-        "epochs": 2,
+        "epochs": 30,
     },
     "Stage 2":
     {
         "Backend": "lstm",
         "learningRate": .003,
-        "epochs": 1,
+        "epochs": 5,
     },
     "Stage 3": {
         "Backend": "lstm",

@@ -6,7 +6,7 @@ import re
 from .validatorFunctions import temporalCNNValidator, lstmValidator
 import config
 from torchsummary import summary
-
+import torch
 
 class Lipreader(nn.Module):
     '''This is the main class for the model.The model is based on a seq2seq
@@ -18,7 +18,7 @@ class Lipreader(nn.Module):
         self.Frontend = Frontend()
         self.Backend = Backend(stage)
         self.stage = "Stage " + str(stage)
-
+        
         if self.stage == "Stage 1":
             self.Loss = nn.CrossEntropyLoss()
             self.Validate = temporalCNNValidator

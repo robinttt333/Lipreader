@@ -10,10 +10,8 @@ from utils import countCorrectOutputs, saveStatsToCSV
 class Trainer():
     def __init__(self, lipreader):
         # Check if gpu is available
-        self.device = "gpu:0" if torch.cuda.is_available() else "cpu"
+        # self.device = "gpu:0" if torch.cuda.is_available() else "cpu"
         self.model = lipreader
-        if torch.cuda.device_count() > 1:
-            self.model = nn.DataParallel(self.model).cuda()
         self.dataset = LRWDataset("train")
         # set drop_last = True once the entire dataset is available
         self.dataLoader = DataLoader(self.dataset, batch_size=config.data["batchSize"],
@@ -30,8 +28,8 @@ class Trainer():
         for _, batch in enumerate(self.dataLoader):
             optimizer.zero_grad()
             input, target = batch
-            input = input.to(self.device)
-            target = target.to(self.device)
+            input = input.cuda()
+            target = target.cuda()
             output = self.model(input)
             correct = countCorrectOutputs(self.model.stage,
                                           target, output).item()

@@ -9,8 +9,10 @@ import argparse
 import os
 from utils import getStageFromFileName, getLastEpochFromFileName, checkIfFileExists, stageChangeRequired
 from evaluate import evaluateVideo
-
+import torch
+import torch.nn as nn
 if __name__ == "__main__":
+    torch.backends.cudnn.enabled = True
     """https://docs.python.org/3.3/library/argparse.html"""
     """We store the last epoch in the trained model.So we can use that to set
     the starting point for begining the training.
@@ -50,6 +52,11 @@ if __name__ == "__main__":
         lipreader = loadModel(lipreader, fileName, changeStage)
     else:
         lipreader = Lipreader()
+    if config.gpuAvailable:
+        lipreader = lipreader.cuda()
+    
+    if config.deviceCount > 1:
+        lipreader = nn.DataParallel(lipreader)
     trainer = Trainer(lipreader)
     validator = Validation(lipreader)
     totalEpochs = config.training["Stage "+str(stage)]["epochs"]
